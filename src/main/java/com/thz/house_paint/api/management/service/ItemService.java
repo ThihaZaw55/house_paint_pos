@@ -3,8 +3,10 @@ package com.thz.house_paint.api.management.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.thz.house_paint.api.management.input.ItemForm;
 import com.thz.house_paint.api.management.output.ItemDTO;
@@ -47,10 +49,12 @@ public class ItemService {
     
     @Transactional
     public ItemDTO updateItem(int id, ItemForm updateItem) {
-        // 👈 ID ရှာမတွေ့ပါက ResourceNotFoundException ပစ်ပေးရပါမည်
         Item item = itemRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Item not found with ID: " + id));
         
+        if (itemRepo.existsByItemName(updateItem.itemName())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Item already has in table");
+        }
         item.setItemName(updateItem.itemName());
         return ItemDTO.toDTO(itemRepo.save(item));
     }

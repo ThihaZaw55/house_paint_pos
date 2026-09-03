@@ -16,6 +16,7 @@ import com.thz.house_paint.model.entity.Product;
 import com.thz.house_paint.model.entity.Purchase;
 import com.thz.house_paint.model.entity.PurchaseItem;
 import com.thz.house_paint.model.repository.ProductRepo;
+import com.thz.house_paint.model.repository.PurchaseItemRepo;
 import com.thz.house_paint.model.repository.PurchaseRepo;
 import com.thz.house_paint.utils.exceptions.custom.ResourceNotFoundException;
 
@@ -25,12 +26,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PurchaseService {
 	
-	private final PurchaseRepo purchaseRepo;
 	private final ProductRepo productRepo;
+	private final PurchaseRepo purchaseRepo;
+	private final PurchaseItemRepo purchaseItemRepo;
 	
 	@Transactional
 	public PurchaseDTO createPurchase(PurchaseForm form) {
-        // 1. Parent Entity (Purchase) ဆောက်ခြင်း
         Purchase purchase = new Purchase();
         purchase.setSupplierName(form.supplierName());
         purchase.setPurchaseDate(form.purchaseDate());
@@ -38,19 +39,16 @@ public class PurchaseService {
 
         BigDecimal calculatedTotal = BigDecimal.ZERO;
 
-        // 2. Child Items Array ကို Loop ပတ်၍ Entity ပြောင်းခြင်း
         for (PurchaseItemForm itemForm : form.items()) {
             Product product = productRepo.findById(itemForm.productId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product not found id: " + itemForm.productId()));
 
-            // PurchaseItem တွင် ယခု ဝယ်ယူသည့် အရေအတွက်အတိုင်းသာ သတ်မှတ်ပါ
             PurchaseItem item = new PurchaseItem();
             item.setProduct(product);
-            item.setBuyQuantity(itemForm.buyQuantity()); // 👈 Fix: Product Stock သွားမပေါင်းရပါ
+            item.setBuyQuantity(itemForm.buyQuantity());
             item.setUnitCostPrice(itemForm.unitCostPrice());
             item.setUnitSalesPrice(itemForm.unitSalesPrice());
 
-            // 3. Product ၏ Stock, CostPrice (Weighted Average) နှင့် SalesPrice များကို Update လုပ်ခြင်း
             updateProductStockAndCost(
                     product, 
                     itemForm.buyQuantity(), 
@@ -59,11 +57,9 @@ public class PurchaseService {
                     true
             );
 
-            // Subtotal တွက်ချက်ခြင်း
             BigDecimal subTotal = itemForm.unitCostPrice().multiply(BigDecimal.valueOf(itemForm.buyQuantity()));
             calculatedTotal = calculatedTotal.add(subTotal);
 
-            // Parent နှင့် Child ချိတ်ဆက်ခြင်း
             purchase.addPurchaseItem(item); 
         }
 
@@ -80,10 +76,7 @@ public class PurchaseService {
     public PurchaseDTO getPurchaseById(UUID id) {
         return purchaseRepo.findById(id)
                 .map(PurchaseDTO::toDTO)
-                .orElse(null);
-        
-//        return safeCall(purchaseRepo.findById(id).map(this::toOutput))
-//				.apply("Product").apply("id").apply(id);
+                .orElseThrow(() -> new ResourceNotFoundException("Purchase not found with ID: " + id));
     }
 
     // 3. READ ALL
@@ -135,4 +128,13 @@ public class PurchaseService {
         productRepo.save(product);
     }
 
+    @Transactional
+    public void deletePurchase(UUID id) {
+        if(!purchaseRepo.existsById(id)) {
+            throw new ResourceNotFoundException("Cannot delete. Purchase not found with ID: " + id);
+        }
+
+		purchaseItemRepo.deleteById(id);
+        purchaseRepo.deleteById(id);
+    }
 }

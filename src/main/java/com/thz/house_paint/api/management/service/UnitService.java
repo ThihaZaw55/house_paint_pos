@@ -49,6 +49,10 @@ public class UnitService {
         Unit unit = unitRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Unit not found with ID: " + id));
         
+        if (unitRepo.existsByUnitName(updatedUnit.unitName())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Unit already has in table");
+        }
+        
         unit.setUnitName(updatedUnit.unitName());
         return UnitDTO.toDto(unitRepo.save(unit));
     }

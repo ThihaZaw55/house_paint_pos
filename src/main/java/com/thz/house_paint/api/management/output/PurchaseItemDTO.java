@@ -1,7 +1,6 @@
 package com.thz.house_paint.api.management.output;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.UUID;
 
 import com.thz.house_paint.model.entity.PurchaseItem;
@@ -25,5 +24,4 @@ public record PurchaseItemDTO(
 		return dto;
 		
 	}
-
 }

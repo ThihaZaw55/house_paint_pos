@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.thz.house_paint.api.management.input.ProductForm;
+import com.thz.house_paint.api.management.input.UpdateProductForm;
 import com.thz.house_paint.api.management.output.ProductDTO;
 import com.thz.house_paint.model.entity.Colour;
 import com.thz.house_paint.model.entity.Item;
@@ -20,7 +21,6 @@ import com.thz.house_paint.model.repository.ColorRepo;
 import com.thz.house_paint.model.repository.ItemRepo;
 import com.thz.house_paint.model.repository.ProductRepo;
 import com.thz.house_paint.model.repository.UnitRepo;
-import com.thz.house_paint.utils.exceptions.BusinessRuleViolationException;
 import com.thz.house_paint.utils.exceptions.ProductAlreadyExistsException;
 import com.thz.house_paint.utils.exceptions.custom.ResourceNotFoundException;
 
@@ -44,9 +44,7 @@ public class ProductService {
         if (form == null) return null;
 
         // 1. Check if product already exists in DB
-        Optional<Product> existingProductOpt = (form.colourId() == null)
-                ? productRepo.findByItem_ItemIdAndUnit_UnitIdAndColourIsNull(form.itemId(), form.unitId())
-                : productRepo.findByItem_ItemIdAndUnit_UnitIdAndColour_ColourId(form.itemId(), form.unitId(), form.colourId());
+        Optional<Product> existingProductOpt = productRepo.findByItem_ItemIdAndUnit_UnitIdAndColourIsNull(form.itemId(), form.unitId());
 
         if (existingProductOpt.isPresent()) {
             ProductDTO existingDTO = ProductDTO.toDTO(existingProductOpt.get());
@@ -71,25 +69,35 @@ public class ProductService {
     // ==========================================
     // 2. UPDATE PRODUCT BY ID (အဟောင်းကို ပြင်ဆင်ခြင်း)
     // ==========================================
-    public ProductDTO updateProduct(int id, ProductForm form, MultipartFile imageFile) {
-        if (form == null) return null;
+    public ProductDTO updateProduct(int id, UpdateProductForm updateProduct, MultipartFile imageFile) {
+        if (updateProduct == null) return null;
 
+        if(!productRepo.existsById(id)) {
+        	throw new ResourceNotFoundException("There is no product with id " + id);
+        }
+        
+     // 1. Check if product already exists in DB
+//        Optional<Product> existingProduct = (form.colourId() == null)
+//                ? productRepo.findByItem_ItemIdAndUnit_UnitIdAndColourIsNull(form.itemId(), form.unitId())
+//                : productRepo.findByItem_ItemIdAndUnit_UnitIdAndColour_ColourId(form.itemId(), form.unitId(), form.colourId());
+
+        
         // Fetch Existing Product
         Product existingProduct = productRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Product ID: " + id));
 
-        // Fetch Relational Entities
-        Item item = fetchItem(form.itemId());
-        Unit unit = fetchUnit(form.unitId());
-        Colour colour = fetchColor(form.colourId());
+//        // Fetch Relational Entities
+//        Item item = fetchItem(form.itemId());
+//        Unit unit = fetchUnit(form.unitId());
+        Colour colour = fetchColor(updateProduct.colourId());
 
         // Update Entity Fields
-        existingProduct.setItem(item);
-        existingProduct.setUnit(unit);
+//        existingProduct.setItem(item);
+//        existingProduct.setUnit(unit);
         existingProduct.setColour(colour);
-        existingProduct.setCostPrice(form.costPrice());
-        existingProduct.setSalesPrice(form.salesPrice());
-        existingProduct.setStockQuantity(form.stockQuantity());
+        existingProduct.setCostPrice(updateProduct.costPrice());
+        existingProduct.setSalesPrice(updateProduct.salesPrice());
+        existingProduct.setStockQuantity(updateProduct.stockQuantity());
 
         // Handle Image Upload (Update ONLY if a new image file is provided)
         MultipartFile newImageFile = imageFile;
@@ -122,21 +130,7 @@ public class ProductService {
 //                .apply("product").apply("id").apply(id);
     	return productRepo.findById(id)
     			.map(ProductDTO::toDTO)
-    			.orElseThrow(() -> new BusinessRuleViolationException("There is no product with id " + id));
-    }
-
-    // ==========================================
-    // 4. DELETE METHOD
-    // ==========================================
-    public void deleteProduct(int id) {
-        Product product = productRepo.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found with ID: " + id));
-
-        if (product.getImageUrl() != null) {
-            fileStorageService.deleteFile(product.getImageUrl());
-        }
-
-        productRepo.delete(product);
+    			.orElseThrow(() -> new ResourceNotFoundException("There is no product with id " + id));
     }
 
     // ==========================================
@@ -167,6 +161,24 @@ public class ProductService {
         productRepo.save(product);
     }
 
+    // ==========================================
+    // 4. DELETE METHOD
+    // ==========================================
+    public void deleteProduct(int id) {
+    	if(!productRepo.existsById(id)) {
+            throw new ResourceNotFoundException("Cannot delete. Product not found with ID: " + id);
+        }
+    	
+        Product product = productRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found with ID: " + id));
+
+        if (product.getImageUrl() != null) {
+            fileStorageService.deleteFile(product.getImageUrl());
+        }
+
+        productRepo.delete(product);
+    }
+    
     // ==========================================
     // HELPER METHODS (DRY Principle)
     // ==========================================

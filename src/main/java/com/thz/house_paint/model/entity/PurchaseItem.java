@@ -3,8 +3,9 @@ package com.thz.house_paint.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "purchase_items")
@@ -20,6 +21,7 @@ public class PurchaseItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "purchase_id", nullable = false)
+    @JsonIgnoreProperties("items")
     private Purchase purchase;
 
     @ManyToOne(fetch = FetchType.LAZY)

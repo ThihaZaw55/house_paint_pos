@@ -72,7 +72,7 @@ public class FileStorageService {
         }
 
         try {
-            // 1. Path ထဲမှ File Name သီးသန့်ထုတ်ယူခြင်း (e.g. "xyz.jpg")
+            // 1. Path ထဲမှ File Name သီးသန့်ထုတ်ယူခြင်း (e.g. "6fa854a0-0ff4-4432-9400-290ecbbb0532.jpg")
             String fileName = Paths.get(imageUrl).getFileName().toString();
 
             // 2. Absolute Path ရှာဖွေခြင်း

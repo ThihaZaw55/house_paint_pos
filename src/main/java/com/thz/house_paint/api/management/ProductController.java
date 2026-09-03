@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.thz.house_paint.api.management.input.ProductForm;
+import com.thz.house_paint.api.management.input.UpdateProductForm;
 import com.thz.house_paint.api.management.output.ApiResponse;
 import com.thz.house_paint.api.management.output.ProductDTO;
 import com.thz.house_paint.api.management.service.ProductService;
@@ -52,9 +53,9 @@ public class ProductController {
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ProductDTO> updateProduct(
             @PathVariable int id, 
-            @Valid @RequestPart("data") ProductForm form, 
+            @Valid @RequestPart("data") UpdateProductForm updateProduct, 
             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
-        ProductDTO updated = productService.updateProduct(id, form, imageFile);
+        ProductDTO updated = productService.updateProduct(id, updateProduct, imageFile);
         if (updated == null) {
             return ResponseEntity.notFound().build();
         }
