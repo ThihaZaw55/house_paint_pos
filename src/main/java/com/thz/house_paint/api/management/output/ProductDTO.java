@@ -14,7 +14,7 @@ public record ProductDTO(
     Integer stockQuantity,
     BigDecimal costPrice,
     BigDecimal salesPrice,
-    String imageUrl
+    String imagePath
 ) {
 
     public static ProductDTO toDTO(Product entity) {

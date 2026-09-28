@@ -18,6 +18,7 @@ import com.thz.house_paint.api.management.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/admin/products")
 @RequiredArgsConstructor
@@ -36,8 +37,9 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+    public ResponseEntity<ApiResponse<List<ProductDTO>>> getAllProducts() {
+    	List<ProductDTO> dto = productService.getAllProducts();
+        return ResponseEntity.ok(new ApiResponse<>(true, "Items retrieved successfully", dto));
     }
 
     @GetMapping("/{id}")
