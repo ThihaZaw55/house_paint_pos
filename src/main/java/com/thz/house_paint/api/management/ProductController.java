@@ -53,7 +53,7 @@ public class ProductController {
 
     // @PostMapping မှ @PutMapping သို့ ပြောင်းလဲထားပြီး @RequestBody ကို @RequestPart သို့ ပြင်ဆင်ထားသည်
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ProductDTO> updateProduct(
+    public ResponseEntity<ApiResponse<ProductDTO>> updateProduct(
             @PathVariable int id, 
             @Valid @RequestPart("data") UpdateProductForm updateProduct, 
             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
@@ -61,7 +61,7 @@ public class ProductController {
         if (updated == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(new ApiResponse<ProductDTO>(true, "Update Successfully", updated) );
     }
 
     @DeleteMapping("/{id}")

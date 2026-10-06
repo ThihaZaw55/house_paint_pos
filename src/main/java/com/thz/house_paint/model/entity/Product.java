@@ -42,7 +42,7 @@ public class Product {
     private BigDecimal costPrice = BigDecimal.ZERO;
 
     @Column(name = "sales_price", nullable = false, precision = 12, scale = 2)
-    private BigDecimal salesPrice = BigDecimal.ZERO;
+    private BigDecimal salePrice = BigDecimal.ZERO;
     
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)

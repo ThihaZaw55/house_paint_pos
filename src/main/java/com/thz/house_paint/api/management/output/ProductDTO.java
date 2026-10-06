@@ -13,7 +13,7 @@ public record ProductDTO(
     String colourName,
     Integer stockQuantity,
     BigDecimal costPrice,
-    BigDecimal salesPrice,
+    BigDecimal salePrice,
     String imagePath
 ) {
 
@@ -39,7 +39,7 @@ public record ProductDTO(
             colourName,
             entity.getStockQuantity(),
             entity.getCostPrice(),
-            entity.getSalesPrice(),
+            entity.getSalePrice(),
             entity.getImageUrl()
         );
     }

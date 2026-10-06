@@ -52,7 +52,8 @@ public class FileStorageService {
             	throw new IllegalArgumentException("Invalid file extension");
             }
             // 2. File Name ထပ်မသွားစေရန် UUID ဖြင့် နာမည်အသစ်ပေးခြင်း
-            String newFileName = UUID.randomUUID().toString() + extension;
+            //String newFileName = UUID.randomUUID().toString() + extension;
+            var newFileName = getFileName(originalFilename, file);
 
             // 3. Folder ထဲသို့ File ကူးယူ သိမ်းဆည်းခြင်း
             Path destination = this.uploadPath.resolve(newFileName);
@@ -66,6 +67,16 @@ public class FileStorageService {
         }
     }
 
+    private String getFileName(String id, MultipartFile file) {
+		return "%s".formatted(id, getExtension(file));
+	}
+    
+    private String getExtension(MultipartFile file) {
+		var fileName = file.getOriginalFilename();
+		var array = fileName.split("\\.");
+		return array[array.length - 1];
+	}
+    
     public void deleteFile(String imageUrl) {
         if (imageUrl == null || imageUrl.isBlank()) {
             return;
@@ -74,6 +85,7 @@ public class FileStorageService {
         try {
             // 1. Path ထဲမှ File Name သီးသန့်ထုတ်ယူခြင်း (e.g. "6fa854a0-0ff4-4432-9400-290ecbbb0532.jpg")
             String fileName = Paths.get(imageUrl).getFileName().toString();
+            
 
             // 2. Absolute Path ရှာဖွေခြင်း
             Path targetFolder = this.uploadPath.toAbsolutePath().normalize();

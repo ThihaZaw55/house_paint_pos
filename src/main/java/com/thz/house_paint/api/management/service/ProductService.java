@@ -96,7 +96,7 @@ public class ProductService {
 //        existingProduct.setUnit(unit);
         existingProduct.setColour(colour);
         existingProduct.setCostPrice(updateProduct.costPrice());
-        existingProduct.setSalesPrice(updateProduct.salesPrice());
+        existingProduct.setSalePrice(updateProduct.salePrice());
         existingProduct.setStockQuantity(updateProduct.stockQuantity());
 
         // Handle Image Upload (Update ONLY if a new image file is provided)
@@ -155,7 +155,7 @@ public class ProductService {
         product.setCostPrice(newAverageCost);
 
         if (unitSalesPrice != null && unitSalesPrice.compareTo(BigDecimal.ZERO) > 0) {
-            product.setSalesPrice(unitSalesPrice);
+            product.setSalePrice(unitSalesPrice);
         }
 
         productRepo.save(product);

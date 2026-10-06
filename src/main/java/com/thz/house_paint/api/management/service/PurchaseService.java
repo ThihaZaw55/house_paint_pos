@@ -115,7 +115,7 @@ public class PurchaseService {
         product.setStockQuantity(updatedStock);
         if(isOwn) {
             product.setCostPrice(newCost);
-            product.setSalesPrice(newSalesPrice);
+            product.setSalePrice(newSalesPrice);
         } else {
         	 // Weighted Average Cost Formula: ((OldStock * OldCost) + (BuyQty * NewCost)) / NewStock
             totalOldVal = oldCost.multiply(BigDecimal.valueOf(oldStock));
@@ -123,7 +123,7 @@ public class PurchaseService {
             weightedCost = totalOldVal.add(totalNewVal).divide(BigDecimal.valueOf(updatedStock), 2, RoundingMode.HALF_UP);
             
             product.setCostPrice(weightedCost);
-            product.setSalesPrice(newSalesPrice); // ရောင်းစျေးအသစ်အတိုင်း Update ပြုလုပ်ခြင်း
+            product.setSalePrice(newSalesPrice); // ရောင်းစျေးအသစ်အတိုင်း Update ပြုလုပ်ခြင်း
         }
         productRepo.save(product);
     }
