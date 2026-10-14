@@ -14,6 +14,7 @@ public record ProductDTO(
     Integer stockQuantity,
     BigDecimal costPrice,
     BigDecimal salePrice,
+    String description,
     String imagePath
 ) {
 
@@ -40,6 +41,7 @@ public record ProductDTO(
             entity.getStockQuantity(),
             entity.getCostPrice(),
             entity.getSalePrice(),
+            entity.getDescription(),
             entity.getImageUrl()
         );
     }

@@ -44,6 +44,9 @@ public class Product {
     @Column(name = "sales_price", nullable = false, precision = 12, scale = 2)
     private BigDecimal salePrice = BigDecimal.ZERO;
     
+    @Column(name = "description")
+    private String description;
+    
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

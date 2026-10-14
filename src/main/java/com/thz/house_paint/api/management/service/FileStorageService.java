@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class FileStorageService {

@@ -28,8 +28,9 @@ public record ProductForm(
 	    
 	    @NotNull(message = "Sales price မဖြစ်မနေ ပါရပါမည်")
 	    @PositiveOrZero(message = "Sales price သည် 0 သို့မဟုတ် 0 ထက် ကြီးရပါမည်")
-	    BigDecimal salePrice
+	    BigDecimal salePrice,
 	    
+	    String description
 	    //String imageUrl
 ) {
 	public Product toEntity(Item item, Unit unit, Colour colour, String imageUrl) {
@@ -40,6 +41,7 @@ public record ProductForm(
 		        product.setStockQuantity(this.stockQuantity());
 		        product.setCostPrice(this.costPrice());
 		        product.setSalePrice(this.salePrice());
+		        product.setDescription(description);
 		        product.setImageUrl(imageUrl);
 		        return product;
 	}

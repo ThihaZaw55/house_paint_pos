@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 import com.thz.house_paint.model.entity.Colour;
 import com.thz.house_paint.model.entity.Product;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
 public record UpdateProductForm(
@@ -20,7 +19,9 @@ public record UpdateProductForm(
 	    
 	    //@NotNull(message = "Sales price မဖြစ်မနေ ပါရပါမည်")
 	    @PositiveOrZero(message = "Sales price သည် 0 သို့မဟုတ် 0 ထက် ကြီးရပါမည်")
-	    BigDecimal salePrice
+	    BigDecimal salePrice,
+	    
+	    String description
 ) {
 	public Product toEntity(Colour colour, String imageUrl) {
 		        Product product = new Product();
@@ -28,6 +29,7 @@ public record UpdateProductForm(
 		        product.setStockQuantity(this.stockQuantity());
 		        product.setCostPrice(this.costPrice());
 		        product.setSalePrice(this.salePrice());
+		        product.setDescription(description);
 		        product.setImageUrl(imageUrl);
 		        return product;
 	}

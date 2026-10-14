@@ -65,8 +65,8 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<Void>> deleteProduct(@PathVariable int id) {
         productService.deleteProduct(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new ApiResponse<Void>(true, "Deleted Successfully", null));
     }
 }

@@ -50,10 +50,10 @@ public class UnitController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<String>> deleteUnit(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<Void>> deleteUnit(@PathVariable int id) {
         unitService.deleteUnit(id);
         return ResponseEntity.ok(
-            new ApiResponse<>(true, "Unit deleted successfully", null)
+            new ApiResponse<Void>(true, "Unit deleted successfully", null)
         );
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.thz.house_paint.api.management.input.ProductForm;
 import com.thz.house_paint.api.management.input.PurchaseForm;
+import com.thz.house_paint.api.management.output.ApiResponse;
 import com.thz.house_paint.api.management.output.PurchaseDTO;
 import com.thz.house_paint.api.management.service.PurchaseService;
 
@@ -29,8 +30,9 @@ public class PurchaseController {
 	private final PurchaseService purchaseService;
  
 	@PostMapping
-	public ResponseEntity<PurchaseDTO> createPurchase(@Valid @RequestBody PurchaseForm form) {
-		return new ResponseEntity<PurchaseDTO>(purchaseService.createPurchase(form), HttpStatus.CREATED);
+	public ResponseEntity<ApiResponse<PurchaseDTO>> createPurchase(@Valid @RequestBody PurchaseForm form) {
+		var createPurchase = purchaseService.createPurchase(form);
+		return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<PurchaseDTO>(true, "Unit created successfully", createPurchase));
 	}
 	
 	@GetMapping("/{id}")
@@ -48,12 +50,12 @@ public class PurchaseController {
 	}
 	
 	@PutMapping("/{id}")
-    public ResponseEntity<PurchaseDTO> updateProduct(@PathVariable UUID id, @Valid @RequestBody ProductForm form) {
+    public ResponseEntity<ApiResponse<PurchaseDTO>> updateProduct(@PathVariable UUID id, @Valid @RequestBody ProductForm form) {
 		PurchaseDTO updated = purchaseService.updatePurchase(id, null);
         if (updated == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(new ApiResponse<PurchaseDTO>(false, "Update Successfully", updated));
     }
 	
 	
