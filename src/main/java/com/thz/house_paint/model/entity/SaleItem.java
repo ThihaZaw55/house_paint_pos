@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "sale_items")
 @Getter
@@ -40,5 +42,6 @@ public class SaleItem {
     private BigDecimal discountPrice = BigDecimal.ZERO;
     
     @Column(name = "sale_date", updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate saleDate;
 }

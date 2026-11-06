@@ -3,7 +3,9 @@ package com.thz.house_paint.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "payments")
@@ -35,10 +37,11 @@ public class Payment {
     private String note;
 
     @Column(name = "payment_date", updatable = false)
-    private LocalDateTime paymentDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate paymentDate;
 
     @PrePersist
     protected void onCreate() {
-        this.paymentDate = LocalDateTime.now();
+        this.paymentDate = LocalDate.now();
     }
 }

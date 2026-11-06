@@ -1,14 +1,13 @@
 package com.thz.house_paint.api.management.input;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
-
 public record SaleForm(
-		 String invoiceUuid, 
+		 String invoice, 
 		 String customerName,
-		 LocalDateTime saleDate, 
+		 LocalDate saleDate, 
 		 BigDecimal totalAmount,
 		 List<SaleItemForm> items){
 
