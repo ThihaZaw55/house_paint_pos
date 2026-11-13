@@ -14,10 +14,10 @@ public record PurchaseItemForm(
 		int buyQuantity,
 
 	    @NotNull @PositiveOrZero
-	    BigDecimal unitCostPrice,
+	    BigDecimal costPrice,
 
 	    @NotNull @PositiveOrZero
-	    BigDecimal unitSalesPrice
+	    BigDecimal salePrice
 		) 
 {
 

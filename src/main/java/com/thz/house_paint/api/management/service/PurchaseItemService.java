@@ -54,21 +54,21 @@ public class PurchaseItemService {
 	        item.setPurchase(savedPurchase); // 🌟 ဦးစွာ ရရှိထားသော Parent Purchase ကို ချိတ်ပေးရပါမည်
 	        item.setProduct(product);
 	        item.setBuyQuantity(itemForm.buyQuantity());
-	        item.setUnitCostPrice(itemForm.unitCostPrice());
-	        item.setUnitSalesPrice(itemForm.unitSalesPrice());
+	        item.setCostPrice(itemForm.costPrice());
+	        item.setSalePrice(itemForm.salePrice());
 
 	        itemsToSave.add(item);
 
 	        // Grand Total Amount တွက်ချက်ခြင်း
-	        BigDecimal itemTotal = itemForm.unitCostPrice().multiply(BigDecimal.valueOf(itemForm.buyQuantity()));
+	        BigDecimal itemTotal = itemForm.costPrice().multiply(BigDecimal.valueOf(itemForm.buyQuantity()));
 	        grandTotal = grandTotal.add(itemTotal);
 
 	        // Product Stock ပေါင်းပေးခြင်း နှင့် Cost Price Update လုပ်ခြင်း
 	        productService.updateProductStockAndCost(
 	                product, 
 	                itemForm.buyQuantity(), 
-	                itemForm.unitCostPrice(), 
-	                itemForm.unitSalesPrice()
+	                itemForm.costPrice(), 
+	                itemForm.salePrice()
 	        );
 	    }
 

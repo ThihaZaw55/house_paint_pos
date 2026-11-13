@@ -31,10 +31,10 @@ public class PurchaseItem {
     @Column(name = "buy_quantity", nullable = false)
     private int buyQuantity;
 
-    @Column(name = "unit_cost_price", nullable = false, precision = 12, scale = 2)
-    private BigDecimal unitCostPrice;
+    @Column(name = "cost_price", nullable = false, precision = 12, scale = 2)
+    private BigDecimal costPrice;
 
-    @Column(name = "unit_sales_price", nullable = false, precision = 12, scale = 2)
-    private BigDecimal unitSalesPrice;
+    @Column(name = "sale_price", nullable = false, precision = 12, scale = 2)
+    private BigDecimal salePrice;
 
 }

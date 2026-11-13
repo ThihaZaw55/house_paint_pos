@@ -18,8 +18,8 @@ public record PurchaseItemDTO(
 		
 		var dto =  new PurchaseItemDTO(entity.getPurchaseItemId(), entity.getPurchase().getPurchaseId(),
 				entity.getProduct().getProductId(),
-				entity.getBuyQuantity(), entity.getUnitCostPrice(),
-				entity.getUnitSalesPrice());
+				entity.getBuyQuantity(), entity.getCostPrice(),
+				entity.getSalePrice());
 		
 		return dto;
 		

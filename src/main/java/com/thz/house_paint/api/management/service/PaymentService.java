@@ -1,7 +1,6 @@
 package com.thz.house_paint.api.management.service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -69,7 +68,6 @@ public class PaymentService {
         payment.setAmount(request.totalAmount());
         payment.setStatus("COMPLETED");
         payment.setPaymentDate(request.saleDate());
-
 
         return paymentRepo.save(payment); // PaymentRepo ဖြင့် သိမ်းမည်
     }

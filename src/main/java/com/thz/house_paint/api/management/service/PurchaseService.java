@@ -39,25 +39,25 @@ public class PurchaseService {
 
         BigDecimal calculatedTotal = BigDecimal.ZERO;
 
-        for (PurchaseItemForm itemForm : form.items()) {
+        for (PurchaseItemForm itemForm : form.purchaseItems()) {
             Product product = productRepo.findById(itemForm.productId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product not found id: " + itemForm.productId()));
 
             PurchaseItem item = new PurchaseItem();
             item.setProduct(product);
             item.setBuyQuantity(itemForm.buyQuantity());
-            item.setUnitCostPrice(itemForm.unitCostPrice());
-            item.setUnitSalesPrice(itemForm.unitSalesPrice());
+            item.setCostPrice(itemForm.costPrice());
+            item.setSalePrice(itemForm.salePrice());
 
             updateProductStockAndCost(
                     product, 
                     itemForm.buyQuantity(), 
-                    itemForm.unitCostPrice(), 
-                    itemForm.unitSalesPrice(),
+                    itemForm.costPrice(), 
+                    itemForm.salePrice(),
                     true
             );
 
-            BigDecimal subTotal = itemForm.unitCostPrice().multiply(BigDecimal.valueOf(itemForm.buyQuantity()));
+            BigDecimal subTotal = itemForm.costPrice().multiply(BigDecimal.valueOf(itemForm.buyQuantity()));
             calculatedTotal = calculatedTotal.add(subTotal);
 
             purchase.addPurchaseItem(item); 
@@ -79,7 +79,6 @@ public class PurchaseService {
                 .orElseThrow(() -> new ResourceNotFoundException("Purchase not found with ID: " + id));
     }
 
-    // 3. READ ALL
     @Transactional(readOnly = true)
     public List<PurchaseDTO> getAllPurchases() {
         return purchaseRepo.findAll().stream()

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.thz.house_paint.model.entity.Purchase;
 
 import jakarta.validation.constraints.NotEmpty;
@@ -20,7 +21,8 @@ public record PurchaseForm(
 	    BigDecimal totalCost,
 	    
 	    @NotEmpty(message = "ဝယ်ယူသည့် ပစ္စည်းစာရင်း အနည်းဆုံး ၁ ခု ပါရပါမည်")
-	    List<PurchaseItemForm> items
+		@JsonProperty("purchaseItems")
+	    List<PurchaseItemForm> purchaseItems
 	    ) 
 {
 	public Purchase toEntity(PurchaseForm form) {
