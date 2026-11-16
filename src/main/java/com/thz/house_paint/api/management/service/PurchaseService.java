@@ -35,7 +35,7 @@ public class PurchaseService {
         Purchase purchase = new Purchase();
         purchase.setSupplierName(form.supplierName());
         purchase.setPurchaseDate(form.purchaseDate());
-        purchase.setPurchaseUpdateDate(LocalDate.now());
+        purchase.setPurchaseUpdateDate(form.purchaseDate());
 
         BigDecimal calculatedTotal = BigDecimal.ZERO;
 

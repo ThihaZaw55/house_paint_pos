@@ -98,6 +98,7 @@ public class ProductService {
         existingProduct.setCostPrice(updateProduct.costPrice());
         existingProduct.setSalePrice(updateProduct.salePrice());
         existingProduct.setStockQuantity(updateProduct.stockQuantity());
+        existingProduct.setDescription(updateProduct.description());
 
         // Handle Image Upload (Update ONLY if a new image file is provided)
         MultipartFile newImageFile = imageFile;
