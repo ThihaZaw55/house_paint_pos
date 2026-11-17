@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.thz.house_paint.api.management.input.ProductForm;
 import com.thz.house_paint.api.management.input.PurchaseForm;
+import com.thz.house_paint.api.management.input.PurchaseSearch;
 import com.thz.house_paint.api.management.output.ApiResponse;
 import com.thz.house_paint.api.management.output.PurchaseDTO;
+import com.thz.house_paint.api.management.output.PurchaseItemTableDTO;
 import com.thz.house_paint.api.management.service.PurchaseService;
 
 import jakarta.validation.Valid;
@@ -29,6 +31,10 @@ public class PurchaseController {
 
 	private final PurchaseService purchaseService;
  
+	@GetMapping
+	public List<PurchaseItemTableDTO> search(PurchaseSearch search){
+		return purchaseService.search(search);
+	}
 	@PostMapping
 	public ResponseEntity<ApiResponse<PurchaseDTO>> createPurchase(@Valid @RequestBody PurchaseForm form) {
 		var createPurchase = purchaseService.createPurchase(form);

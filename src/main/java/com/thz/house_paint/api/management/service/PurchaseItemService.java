@@ -39,7 +39,7 @@ public class PurchaseItemService {
 	    purchase.setPurchaseUpdateDate(LocalDate.now());
 	    purchase.setTotalAmount(BigDecimal.ZERO);
 	    
-	    Purchase savedPurchase = purchaseRepo.save(purchase); // 👈 ID စတင် ရရှိသွားပါပြီ
+	    Purchase savedPurchase = purchaseRepo.save(purchase);
 
 	    BigDecimal grandTotal = BigDecimal.ZERO;
 	    List<PurchaseItem> itemsToSave = new ArrayList<>();
@@ -51,7 +51,7 @@ public class PurchaseItemService {
 
 	        // Item Object ဆောက်ခြင်း
 	        PurchaseItem item = new PurchaseItem();
-	        item.setPurchase(savedPurchase); // 🌟 ဦးစွာ ရရှိထားသော Parent Purchase ကို ချိတ်ပေးရပါမည်
+	        item.setPurchase(savedPurchase); // ဦးစွာ ရရှိထားသော Parent Purchase ကို ချိတ်ပေးရပါမည်
 	        item.setProduct(product);
 	        item.setBuyQuantity(itemForm.buyQuantity());
 	        item.setCostPrice(itemForm.costPrice());

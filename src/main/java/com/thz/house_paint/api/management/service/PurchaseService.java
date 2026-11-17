@@ -2,7 +2,6 @@ package com.thz.house_paint.api.management.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.thz.house_paint.api.management.input.PurchaseForm;
 import com.thz.house_paint.api.management.input.PurchaseItemForm;
+import com.thz.house_paint.api.management.input.PurchaseSearch;
 import com.thz.house_paint.api.management.output.PurchaseDTO;
+import com.thz.house_paint.api.management.output.PurchaseItemTableDTO;
 import com.thz.house_paint.model.entity.Product;
 import com.thz.house_paint.model.entity.Purchase;
 import com.thz.house_paint.model.entity.PurchaseItem;
@@ -20,6 +21,7 @@ import com.thz.house_paint.model.repository.PurchaseItemRepo;
 import com.thz.house_paint.model.repository.PurchaseRepo;
 import com.thz.house_paint.utils.exceptions.custom.ResourceNotFoundException;
 
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -29,6 +31,24 @@ public class PurchaseService {
 	private final ProductRepo productRepo;
 	private final PurchaseRepo purchaseRepo;
 	private final PurchaseItemRepo purchaseItemRepo;
+	
+	@Transactional(readOnly = true)
+	public List<PurchaseItemTableDTO> search(PurchaseSearch search){
+	    // purchaseRepo အစား purchaseItemRepo ကို သုံးရပါမည် (PurchaseItem များကို ရှာရန်)
+	    return purchaseItemRepo.search(cb -> {
+	        var cq = cb.createQuery(PurchaseItemTableDTO.class);
+	        var root = cq.from(PurchaseItem.class);
+
+	        PurchaseItemTableDTO.select(cb, cq, root);
+
+	        var predicates = search.where(cb, root);
+	        if (!predicates.isEmpty()) {
+	            cq.where(predicates.toArray(Predicate[]::new));
+	        }
+	        
+	        return cq;
+	    });
+	}
 	
 	@Transactional
 	public PurchaseDTO createPurchase(PurchaseForm form) {
