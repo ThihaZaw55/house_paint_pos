@@ -30,8 +30,8 @@ public record PurchaseItemTableDTO(
         cq.select(cb.construct(
             PurchaseItemTableDTO.class,
             purchase.get(Purchase_.purchaseDate),
-            item.get("name"), // item ရဲ့ name field ကို ယူရန်
-            unit.get("name"), // unit ရဲ့ name field ကို ယူရန်
+            item.get("itemName"), // item ရဲ့ name field ကို ယူရန်
+            unit.get("unitName"), // unit ရဲ့ name field ကို ယူရန်
             root.get(PurchaseItem_.buyQuantity),
             root.get(PurchaseItem_.costPrice),
             root.get(PurchaseItem_.salePrice)
