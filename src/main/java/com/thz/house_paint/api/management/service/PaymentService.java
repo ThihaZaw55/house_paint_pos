@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.thz.house_paint.api.management.input.PaymentForm;
 import com.thz.house_paint.api.management.input.SaleForm;
 import com.thz.house_paint.api.management.input.SaleItemForm;
 import com.thz.house_paint.model.entity.Payment;
@@ -28,7 +29,7 @@ public class PaymentService {
 
     // 1. CREATE / SAVE PAYMENT (Order Complete & Stock Deduct)
     @Transactional
-    public Payment savePayment(SaleForm request) {
+    public Payment savePayment(PaymentForm request) {
         // 1. Sale Header တည်ဆောက်ခြင်း
         Sale sale = new Sale();
         sale.setInvoice(request.invoice());

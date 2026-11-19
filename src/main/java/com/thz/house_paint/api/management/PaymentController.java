@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.thz.house_paint.api.management.input.PaymentForm;
 import com.thz.house_paint.api.management.input.SaleForm; // သို့မဟုတ် PaymentForm
 import com.thz.house_paint.api.management.output.ApiResponse;
 import com.thz.house_paint.api.management.service.PaymentService;
@@ -23,11 +24,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PaymentController {
 	
-    private final PaymentService paymentService; // final ထည့်ခြင်းဖြင့် Dependency Injection ပိုမိုခိုင်မာစေသည်
+    private final PaymentService paymentService;
 
     // 1. CREATE PAYMENT (Complete Payment & Stock Deduct)
     @PostMapping
-    public ResponseEntity<ApiResponse<Payment>> createPayment(@RequestBody SaleForm request) {
+    public ResponseEntity<ApiResponse<Payment>> createPayment(@RequestBody PaymentForm request) {
         Payment savedPayment = paymentService.savePayment(request);
         return ResponseEntity.ok(new ApiResponse<>(true, "Payment Completed Successfully", savedPayment));
     }
